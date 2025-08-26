@@ -1,4 +1,4 @@
-PYTHON := python
+PYTHON := python2
 MD5 := md5sum -c --quiet
 
 2bpp     := $(PYTHON) extras/pokemontools/gfx.py 2bpp
@@ -34,18 +34,18 @@ clean:
 
 %_red.o: dep = $(shell $(includes) $(@D)/$*.asm)
 $(pokered_obj): %_red.o: %.asm $$(dep)
-	rgbasm -D _RED -h -o $@ $*.asm
+	rgbds/rgbasm -D _RED -h -o $@ $*.asm
 
 %_blue.o: dep = $(shell $(includes) $(@D)/$*.asm)
 $(pokeblue_obj): %_blue.o: %.asm $$(dep)
-	rgbasm -D _BLUE -h -o $@ $*.asm
+	rgbds/rgbasm -D _BLUE -h -o $@ $*.asm
 
 pokered_opt  = -jsv -k 01 -l 0x33 -m 0x13 -p 0 -r 03 -t "POKEMON RED"
 pokeblue_opt = -jsv -k 01 -l 0x33 -m 0x13 -p 0 -r 03 -t "POKEMON BLUE"
 
 %.gbc: $$(%_obj)
-	rgblink -n $*.sym -l pokered.link -o $@ $^
-	rgbfix $($*_opt) $@
+	rgbds/rgblink -n $*.sym -l pokered.link -o $@ $^
+	rgbds/rgbfix $($*_opt) $@
 	sort $*.sym -o $*.sym
 
 %.png:  ;
